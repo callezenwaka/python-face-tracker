@@ -10,6 +10,8 @@ ap.add_argument("-v" "--video",
                 help="path to the (optional) video file")
 args = vars(ap.parse_args())
 
+# Create a FaceDetector using a serialized classifier
+# that's trained specifically for frontal face detection
 fd = FaceDetector(args["face"])
 
 # If the user didn't specify a video file,
