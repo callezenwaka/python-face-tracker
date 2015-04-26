@@ -2,7 +2,7 @@
 # published by Dr. Adrian Rosebrock
 # in his books at https://www.pyimagesearch.com/
 
-from facedetector import FaceDetector
+from face_detector import FaceDetector
 import argparse
 import cv2
 
