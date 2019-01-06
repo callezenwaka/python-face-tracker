@@ -57,8 +57,17 @@ while True:
     # using a copy of the image since the findContours
     # function effectively destroys the NumPy array
     # representing the image that's passed into it
-    (cnts, _) = cv2.findContours(red.copy(), cv2.RETR_EXTERNAL,
-                                 cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Determine opencv version running,
+    # opencv2 returns 2 values while 
+    # opencv3 returns 3 values. This is to avoid this error:
+    # ValueError: too many values to unpack (expected 2)
+    # when using opencv3 
+    major = cv2.__version__.split('.')[0]
+    if major == '3':
+        (_, cnts, _) = cv2.findContours(blue.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    else:
+        (cnts, _) = cv2.findContours(blue.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # If at least one contour was found in the image,
     # then we'll sort the list of contours in reverse
@@ -70,7 +79,8 @@ while True:
         # Compute the minimum bounding box surrounding the largest
         # contour in the thresholded iamge, and then reshape that 
         # bounding box to be a list of points 
-        rect = np.int32(cv2.cv.BoxPoints(cv2.minAreaRect(cnt)))
+        # 'cv' is deprecated and 'BoxPoints' has been changed to 'boxPoints' in opencv3
+        rect = np.int32(cv2.boxPoints(cv2.minAreaRect(cnt)))
 
         # Draw a green bounding box around the largest contour
         # in the original frame that was grabbed from the video 
